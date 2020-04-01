@@ -25,7 +25,8 @@ function handleSubmitCity(event) {
   event.preventDefault();
   let searchCity = document.querySelector("#cityName");
   if (searchCity.value && searchCity.value.trim().length > 0) {
-    getCityWeather(searchCity.value, null, null, "metric");
+    let unit = getWeatherUnit();
+    getCityWeather(searchCity.value, null, null, unit);
     searchCity.value = "";
   }
 }
@@ -68,7 +69,19 @@ function getCurrentLocationWeather() {
 function handlePosition(position) {
   let latitude = position.coords.latitude;
   let longitude = position.coords.longitude;
-  getCityWeather(null, latitude, longitude, "metric");
+  let unit = getWeatherUnit();
+  getCityWeather(null, latitude, longitude, unit);
+}
+
+function getWeatherUnit() {
+  let currentUnit = document.querySelector("#current-unit").innerHTML.trim();
+  let unit;
+  if (currentUnit === "C") {
+    unit = "metric";
+  } else {
+    unit = "imperial";
+  }
+  return unit;
 }
 
 function getCityWeather(city, latitude, longitude, unit) {
