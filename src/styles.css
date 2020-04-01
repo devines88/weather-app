@@ -1,0 +1,71 @@
+body {
+  font-family: "Source Sans Pro", sans-serif;
+}
+
+.app-container {
+  box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
+  margin: 20px 0;
+  max-width: 800px;
+  padding: 20px 50px;
+}
+
+div {
+  display: block;
+}
+
+h1.title {
+  color: #df7861;
+  margin: 20px 0;
+}
+
+.current-city {
+  text-align: left;
+  padding: 0px;
+}
+
+.week-days {
+  color: #ecb390;
+  font-size: 18px;
+}
+
+.current-city {
+  color: #769fcd;
+}
+
+.current-day-time,
+.current-weather,
+.current-temperature,
+.weather-stats,
+.week-temperatures {
+  color: #928a97;
+}
+
+.current-temperature,
+.weather-stats {
+  margin-top: 20px;
+}
+
+.weather-stats .row {
+  font-size: 13px;
+  margin-bottom: -3px;
+}
+
+.fa-cloud-sun {
+  color: #ffd460;
+}
+
+.fa-sun {
+  color: #ffd460;
+  font-size: 26px;
+  text-align: center;
+}
+
+.units {
+  font-size: 16px;
+  position: relative;
+  top: -15px;
+}
+
+.current-weather {
+  text-transform: capitalize;
+}

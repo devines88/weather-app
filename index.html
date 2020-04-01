@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Weather Forecast</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="src/styles.css" />
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Source+Sans+Pro&display=swap"
+      rel="stylesheet"
+    />
+    <script
+      src="https://kit.fontawesome.com/acca9d9b45.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="app-container">
+        <div class="row">
+          <div class="col-12">
+            <h1 class="title">Weather Forecast</h1>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <form>
+              <div class="form-group">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="cityName"
+                  placeholder="Type a city..."
+                  autocomplete="off"
+                  autofocus="on"
+                  maxlength="100"
+                />
+              </div>
+            </form>
+          </div>
+          <button type="button" class="btn btn-light mb-4" id="current-location">Current</button>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="current-city">
+              <h2 id="current-city">
+              </h2>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+            <div class="col-6">
+            <div id="current-day-time" class="current-day-time">
+            </div>
+            <div id="weather-description" class="current-weather">
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-7 current-temperature">
+            <h1>
+              <i class="fas fa-cloud-sun"></i>
+              <span id="current-temperature">
+              </span>
+              º
+              <span id="current-unit">
+                C
+              </span>
+              <span class="units">|
+                  <a href="#" id="unit-link">F</a>
+                </span>
+            </h1>
+          </div>
+          <div class="col-5 weather-stats">
+          <div class="row">
+            Humidity:&nbsp;<span id="humidity"></span>%
+          </div>
+          <div class="row">
+            Wind:&nbsp;<span id="wind"></span>
+          <span id="wind-unit">km/h</span>
+          </div>
+        </div>
+      </div>
+      <br />
+      <div class="row">
+        <div class="col-12">
+          <table class="table table-borderless">
+            <thead>
+              <tr class="week-days">
+                <th scope="col">
+                  Sat
+                </th>
+                <th scope="col">
+                  Sun
+                </th>
+                <th scope="col">
+                  Mon
+                </th>
+                <th scope="col">
+                  Tue
+                  </th>
+                <th scope="col">
+                  Wed
+                </th>
+                <th scope="col">
+                  Fri
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <i class="fas fa-sun"></i>
+                </td>
+                <td>
+                  <i class="fas fa-sun"></i>
+                </td>
+                <td>
+                  <i class="fas fa-sun"></i>
+                </td>
+                <td>
+                  <i class="fas fa-sun"></i>
+                </td>
+                <td>
+                  <i class="fas fa-sun"></i>
+                </td>
+                <td>
+                  <i class="fas fa-sun"></i>
+                </td>
+              </tr>
+              <tr class="week-temperatures">
+                <td>
+                  14º
+                  <span class="used-unit">
+                    C
+                  </span>
+                </td>
+                <td>
+                  15º
+                  <span class="used-unit">
+                      C
+                    </span>
+                </td>
+                <td>
+                  14º
+                  <span class="used-unit">
+                      C
+                    </span>
+                </td>
+                <td>
+                  15º
+                  <span class="used-unit">
+                      C
+                    </span>
+                </td>
+                <td>
+                  14º
+                  <span class="used-unit">
+                      C
+                    </span>
+                </td>
+                <td>
+                  15º
+                  <span class="used-unit">
+                      C
+                    </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <script src="src/index.js"></script>
+  </body>
+</html>
