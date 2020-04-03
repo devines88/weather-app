@@ -1,4 +1,5 @@
-function formatData(now) {
+function formatDate(timestamp) {
+  let date = new Date(timestamp);
   let days = [
     "Sunday",
     "Monday",
@@ -8,9 +9,9 @@ function formatData(now) {
     "Friday",
     "Saturday"
   ];
-  let weekDay = days[now.getDay()];
-  let hour = now.getHours();
-  let minutes = now.getMinutes();
+  let weekDay = days[date.getDay()];
+  let hour = date.getHours();
+  let minutes = date.getMinutes();
   return `${weekDay} ${addZero(hour)}:${addZero(minutes)}`;
 }
 
@@ -26,14 +27,13 @@ function handleSubmitCity(event) {
   let searchCity = document.querySelector("#cityName");
   if (searchCity.value && searchCity.value.trim().length > 0) {
     let unit = getWeatherUnit();
-    getCityWeather(searchCity.value, null, null, unit);
+    displayCityWeather(searchCity.value, null, null, unit);
     searchCity.value = "";
   }
 }
 
 function convertUnits(event) {
   event.preventDefault();
-  //let currentTemperature = document.querySelector("#current-temperature");
   let currentUnit = document.querySelector("#current-unit");
   let weekUnits = document.querySelectorAll(".used-unit");
   let windUnit = document.querySelector("#wind-unit");
@@ -44,7 +44,7 @@ function convertUnits(event) {
   if (chosenUnit === "C") {
     unitLink.innerHTML = "F";
     windUnit.innerHTML = "km/h";
-    getCityWeather(
+    displayCityWeather(
       document.querySelector("#current-city").textContent,
       null,
       null,
@@ -53,7 +53,7 @@ function convertUnits(event) {
   } else {
     unitLink.innerHTML = "C";
     windUnit.innerHTML = "mph";
-    getCityWeather(
+    displayCityWeather(
       document.querySelector("#current-city").textContent,
       null,
       null,
@@ -70,7 +70,7 @@ function handlePosition(position) {
   let latitude = position.coords.latitude;
   let longitude = position.coords.longitude;
   let unit = getWeatherUnit();
-  getCityWeather(null, latitude, longitude, unit);
+  displayCityWeather(null, latitude, longitude, unit);
 }
 
 function getWeatherUnit() {
@@ -84,7 +84,7 @@ function getWeatherUnit() {
   return unit;
 }
 
-function getCityWeather(city, latitude, longitude, unit) {
+function displayCityWeather(city, latitude, longitude, unit) {
   let key = "491127d7fac80a30edab9961c6790b41";
   let url;
   if (city) {
@@ -101,17 +101,15 @@ function showLocationWeather(response) {
   let description = document.querySelector("#weather-description");
   let humidity = document.querySelector("#humidity");
   let wind = document.querySelector("#wind");
+  let dateTime = document.querySelector("#current-day-time");
+
   cityName.innerHTML = response.data.name;
   temperature.innerHTML = Math.round(response.data.main.temp);
   description.innerHTML = response.data.weather[0].description;
   humidity.innerHTML = response.data.main.humidity;
   wind.innerHTML = Math.round(response.data.wind.speed);
+  dateTime.innerHTML = formatDate(response.data.dt * 1000);
 }
-
-//Show current Day and time
-let now = new Date();
-let currentDayTime = document.querySelector("#current-day-time");
-currentDayTime.innerHTML = formatData(now);
 
 //Search weather in city
 let form = document.querySelector("form");
