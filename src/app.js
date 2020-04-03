@@ -102,6 +102,7 @@ function showLocationWeather(response) {
   let humidity = document.querySelector("#humidity");
   let wind = document.querySelector("#wind");
   let dateTime = document.querySelector("#current-day-time");
+  let weatherIcon = document.querySelector("#weather-icon");
 
   cityName.innerHTML = response.data.name;
   temperature.innerHTML = Math.round(response.data.main.temp);
@@ -109,6 +110,12 @@ function showLocationWeather(response) {
   humidity.innerHTML = response.data.main.humidity;
   wind.innerHTML = Math.round(response.data.wind.speed);
   dateTime.innerHTML = formatDate(response.data.dt * 1000);
+  weatherIcon.setAttribute(
+    "src",
+    `http://openweathermap.org/img/wn/${response.data.weather[0].icon}@2x.png`
+  );
+  weatherIcon.setAttribute("alt", response.data.weather[0].description);
+  weatherIcon.setAttribute("title", response.data.weather[0].description);
 }
 
 //Search weather in city
