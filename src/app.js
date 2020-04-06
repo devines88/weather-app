@@ -135,22 +135,34 @@ function saveForecast(response) {
     preditions.push({
       day: days[date.getDay()],
       temp: response.data.list[i].main.temp,
-      icon: response.data.list[i].weather[0].icon
+      icon: response.data.list[i].weather[0].icon,
+      description: response.data.list[i].weather[0].description
     });
   }
   displayForecast(preditions);
+  console.log(response.data);
 }
-fiveDaysForecast("Lisbon");
+fiveDaysForecast("Sidney");
 
 function displayForecast(preditions) {
   let forecastDays = document.querySelector("#forecast-days");
+  let forecastIcons = document.querySelector("#forecast-icons");
+  let forecastTemperatures = document.querySelector("#forecast-temperatures");
 
   let weekDaysHTML = "";
+  let iconsHTML = "";
+  let temperaturesHTML = "";
   for (let i = 0; i < preditions.length; i++) {
     console.log(preditions[i].day);
     weekDaysHTML += `<th scope="col">${preditions[i].day}</th>`;
+    iconsHTML += `<td><img src="http://openweathermap.org/img/wn/${preditions[i].icon}@2x.png" alt="${preditions[i].description}" title="${preditions[i].description}" id="forecast-icon"></td>`;
+    temperaturesHTML += `<td>${Math.round(
+      preditions[i].temp
+    )}º<span class="used-unit"> C</span></td>`;
   }
   forecastDays.innerHTML = weekDaysHTML;
+  forecastIcons.innerHTML = iconsHTML;
+  forecastTemperatures.innerHTML = temperaturesHTML;
 }
 
 //Search weather in city
@@ -167,4 +179,4 @@ button.addEventListener("click", getCurrentLocationWeather);
 
 //Get current location weather on load
 //getCurrentLocationWeather();
-displayCityWeather("Lisbon", null, null, "metric");
+displayCityWeather("Sidney", null, null, "metric");

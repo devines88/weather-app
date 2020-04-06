@@ -50,16 +50,6 @@ h1.title {
   margin-bottom: -3px;
 }
 
-.fa-cloud-sun {
-  color: #ffd460;
-}
-
-.fa-sun {
-  color: #ffd460;
-  font-size: 26px;
-  text-align: center;
-}
-
 .units {
   font-size: 16px;
   position: relative;
@@ -68,9 +58,20 @@ h1.title {
 
 .current-weather {
   text-transform: capitalize;
+  margin-bottom: 30px;
+}
+
+.forecast-section {
+  text-align: center;
 }
 
 #weather-icon {
   margin-top: -23px;
   margin-left: -10px;
+}
+
+#forecast-icon {
+  display: block;
+  margin: 0px auto;
+  width: 60px;
 }
