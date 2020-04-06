@@ -1,5 +1,5 @@
 function formatDate(timestamp) {
-  let date = new Date(timestamp);
+  let date = new Date(timestamp * 1000);
   let days = [
     "Sunday",
     "Monday",
@@ -109,13 +109,48 @@ function showLocationWeather(response) {
   description.innerHTML = response.data.weather[0].description;
   humidity.innerHTML = response.data.main.humidity;
   wind.innerHTML = Math.round(response.data.wind.speed);
-  dateTime.innerHTML = formatDate(response.data.dt * 1000);
+  dateTime.innerHTML = formatDate(response.data.dt);
   weatherIcon.setAttribute(
     "src",
     `http://openweathermap.org/img/wn/${response.data.weather[0].icon}@2x.png`
   );
   weatherIcon.setAttribute("alt", response.data.weather[0].description);
   weatherIcon.setAttribute("title", response.data.weather[0].description);
+}
+
+function fiveDaysForecast(city) {
+  let key = "491127d7fac80a30edab9961c6790b41";
+  let url;
+
+  url = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${key}&&units=metric`;
+
+  axios.get(url).then(saveForecast);
+}
+
+function saveForecast(response) {
+  let preditions = [];
+  let days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  for (let i = 7; i < response.data.list.length; i += 8) {
+    let date = new Date(response.data.list[i].dt * 1000);
+    preditions.push({
+      day: days[date.getDay()],
+      temp: response.data.list[i].main.temp,
+      icon: response.data.list[i].weather[0].icon
+    });
+  }
+  displayForecast(preditions);
+}
+fiveDaysForecast("Lisbon");
+
+function displayForecast(preditions) {
+  let forecastDays = document.querySelector("#forecast-days");
+
+  let weekDaysHTML = "";
+  for (let i = 0; i < preditions.length; i++) {
+    console.log(preditions[i].day);
+    weekDaysHTML += `<th scope="col">${preditions[i].day}</th>`;
+  }
+  forecastDays.innerHTML = weekDaysHTML;
 }
 
 //Search weather in city
@@ -131,4 +166,5 @@ let button = document.querySelector("#current-location");
 button.addEventListener("click", getCurrentLocationWeather);
 
 //Get current location weather on load
-getCurrentLocationWeather();
+//getCurrentLocationWeather();
+displayCityWeather("Lisbon", null, null, "metric");
