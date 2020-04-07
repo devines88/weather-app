@@ -26,7 +26,7 @@ function handleSubmitCity(event) {
   event.preventDefault();
   let searchCity = document.querySelector("#cityName");
   if (searchCity.value && searchCity.value.trim().length > 0) {
-    displayCityWeather(searchCity.value, null, null, unitSystem);
+    getCityWeather(searchCity.value, null, null, unitSystem);
     searchCity.value = "";
   }
 }
@@ -41,7 +41,7 @@ function convertUnitSystem(event) {
     unitSystem = "imperial";
   }
 
-  displayCityWeather(
+  getCityWeather(
     document.querySelector("#current-city").textContent,
     null,
     null,
@@ -58,10 +58,10 @@ function getCurrentLocationWeather() {
 function handlePosition(position) {
   let latitude = position.coords.latitude;
   let longitude = position.coords.longitude;
-  displayCityWeather(null, latitude, longitude, unitSystem);
+  getCityWeather(null, latitude, longitude, unitSystem);
 }
 
-function displayCityWeather(city, latitude, longitude, unitSystem) {
+function getCityWeather(city, latitude, longitude, unitSystem) {
   let key = "491127d7fac80a30edab9961c6790b41";
   let url;
   if (city) {
@@ -70,10 +70,10 @@ function displayCityWeather(city, latitude, longitude, unitSystem) {
     url = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${key}&&units=${unitSystem}`;
   }
 
-  axios.get(url).then(showLocationWeather);
+  axios.get(url).then(displayLocationWeather);
 }
 
-function showLocationWeather(response) {
+function displayLocationWeather(response) {
   let cityName = document.querySelector("#current-city");
   let temperature = document.querySelector("#current-temperature");
   let temperatureUnit = document.querySelector("#current-unit");
@@ -154,4 +154,4 @@ let button = document.querySelector("#current-location");
 button.addEventListener("click", getCurrentLocationWeather);
 
 let unitSystem = "metric";
-displayCityWeather("Lisbon", null, null, unitSystem);
+getCityWeather("Lisbon", null, null, unitSystem);
