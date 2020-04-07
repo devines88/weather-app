@@ -26,40 +26,29 @@ function handleSubmitCity(event) {
   event.preventDefault();
   let searchCity = document.querySelector("#cityName");
   if (searchCity.value && searchCity.value.trim().length > 0) {
-    let unit = getWeatherUnit();
-    displayCityWeather(searchCity.value, null, null, unit);
+    displayCityWeather(searchCity.value, null, null, unitSystem);
     searchCity.value = "";
   }
 }
 
-function convertUnits(event) {
+function convertUnitSystem(event) {
   event.preventDefault();
-  let currentUnit = document.querySelector("#current-unit");
-  let weekUnits = document.querySelectorAll(".used-unit");
-  let windUnit = document.querySelector("#wind-unit");
   let chosenUnit = unitLink.textContent;
-  currentUnit.innerHTML = chosenUnit;
-  weekUnits.forEach(day => (day.innerHTML = chosenUnit));
 
   if (chosenUnit === "C") {
-    unitLink.innerHTML = "F";
-    windUnit.innerHTML = "km/h";
-    displayCityWeather(
-      document.querySelector("#current-city").textContent,
-      null,
-      null,
-      "metric"
-    );
+    unitSystem = "metric";
   } else {
-    unitLink.innerHTML = "C";
-    windUnit.innerHTML = "mph";
-    displayCityWeather(
-      document.querySelector("#current-city").textContent,
-      null,
-      null,
-      "imperial"
-    );
+    unitSystem = "imperial";
   }
+
+  displayCityWeather(
+    document.querySelector("#current-city").textContent,
+    null,
+    null,
+    unitSystem
+  );
+
+  unitLink.innerHTML = chosenUnit === "C" ? "F" : "C";
 }
 
 function getCurrentLocationWeather() {
@@ -69,28 +58,16 @@ function getCurrentLocationWeather() {
 function handlePosition(position) {
   let latitude = position.coords.latitude;
   let longitude = position.coords.longitude;
-  let unit = getWeatherUnit();
-  displayCityWeather(null, latitude, longitude, unit);
+  displayCityWeather(null, latitude, longitude, unitSystem);
 }
 
-function getWeatherUnit() {
-  let currentUnit = document.querySelector("#current-unit").innerHTML.trim();
-  let unit;
-  if (currentUnit === "C") {
-    unit = "metric";
-  } else {
-    unit = "imperial";
-  }
-  return unit;
-}
-
-function displayCityWeather(city, latitude, longitude, unit) {
+function displayCityWeather(city, latitude, longitude, unitSystem) {
   let key = "491127d7fac80a30edab9961c6790b41";
   let url;
   if (city) {
-    url = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${key}&&units=${unit}`;
+    url = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${key}&&units=${unitSystem}`;
   } else {
-    url = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${key}&&units=${unit}`;
+    url = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${key}&&units=${unitSystem}`;
   }
 
   axios.get(url).then(showLocationWeather);
@@ -99,6 +76,7 @@ function displayCityWeather(city, latitude, longitude, unit) {
 function showLocationWeather(response) {
   let cityName = document.querySelector("#current-city");
   let temperature = document.querySelector("#current-temperature");
+  let temperatureUnit = document.querySelector("#current-unit");
   let description = document.querySelector("#weather-description");
   let humidity = document.querySelector("#humidity");
   let wind = document.querySelector("#wind");
@@ -108,10 +86,11 @@ function showLocationWeather(response) {
 
   cityName.innerHTML = response.data.city.name;
   temperature.innerHTML = Math.round(response.data.list[0].main.temp);
+  temperatureUnit.innerHTML = unitSystem === "metric" ? "C" : "F";
   description.innerHTML = response.data.list[0].weather[0].description;
   humidity.innerHTML = response.data.list[0].main.humidity;
   wind.innerHTML = Math.round(response.data.list[0].wind.speed);
-  windUnit.innerHTML = getWeatherUnit() === "metric" ? "km/h" : "mph";
+  windUnit.innerHTML = unitSystem === "metric" ? "m/s" : "mph";
   dateTime.innerHTML = formatDate(response.data.list[0].dt);
   weatherIcon.setAttribute(
     "src",
@@ -145,7 +124,7 @@ function displayForecast(preditions) {
   let forecastDays = document.querySelector("#forecast-days");
   let forecastIcons = document.querySelector("#forecast-icons");
   let forecastTemperatures = document.querySelector("#forecast-temperatures");
-  let currentUnit = document.querySelector("#current-unit").innerHTML.trim();
+  let currentUnit = unitSystem === "metric" ? "C" : "F";
 
   let weekDaysHTML = "";
   let iconsHTML = "";
@@ -168,11 +147,11 @@ form.addEventListener("submit", handleSubmitCity);
 
 //Convert units (C, F)
 let unitLink = document.querySelector("#unit-link");
-unitLink.addEventListener("click", convertUnits);
+unitLink.addEventListener("click", convertUnitSystem);
 
 //Current location weather
 let button = document.querySelector("#current-location");
 button.addEventListener("click", getCurrentLocationWeather);
 
-//Get current location weather on load
-getCurrentLocationWeather();
+let unitSystem = "metric";
+displayCityWeather("Lisbon", null, null, unitSystem);
