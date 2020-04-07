@@ -105,7 +105,6 @@ function showLocationWeather(response) {
   let windUnit = document.querySelector("#wind-unit");
   let dateTime = document.querySelector("#current-day-time");
   let weatherIcon = document.querySelector("#weather-icon");
-  debugger;
 
   cityName.innerHTML = response.data.city.name;
   temperature.innerHTML = Math.round(response.data.list[0].main.temp);
