@@ -88,10 +88,11 @@ function displayCityWeather(city, latitude, longitude, unit) {
   let key = "491127d7fac80a30edab9961c6790b41";
   let url;
   if (city) {
-    url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${key}&&units=${unit}`;
+    url = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${key}&&units=${unit}`;
   } else {
-    url = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${key}&&units=${unit}`;
+    url = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${key}&&units=${unit}`;
   }
+
   axios.get(url).then(showLocationWeather);
 }
 
@@ -101,30 +102,29 @@ function showLocationWeather(response) {
   let description = document.querySelector("#weather-description");
   let humidity = document.querySelector("#humidity");
   let wind = document.querySelector("#wind");
+  let windUnit = document.querySelector("#wind-unit");
   let dateTime = document.querySelector("#current-day-time");
   let weatherIcon = document.querySelector("#weather-icon");
+  debugger;
 
-  cityName.innerHTML = response.data.name;
-  temperature.innerHTML = Math.round(response.data.main.temp);
-  description.innerHTML = response.data.weather[0].description;
-  humidity.innerHTML = response.data.main.humidity;
-  wind.innerHTML = Math.round(response.data.wind.speed);
-  dateTime.innerHTML = formatDate(response.data.dt);
+  cityName.innerHTML = response.data.city.name;
+  temperature.innerHTML = Math.round(response.data.list[0].main.temp);
+  description.innerHTML = response.data.list[0].weather[0].description;
+  humidity.innerHTML = response.data.list[0].main.humidity;
+  wind.innerHTML = Math.round(response.data.list[0].wind.speed);
+  windUnit.innerHTML = getWeatherUnit() === "metric" ? "km/h" : "mph";
+  dateTime.innerHTML = formatDate(response.data.list[0].dt);
   weatherIcon.setAttribute(
     "src",
-    `http://openweathermap.org/img/wn/${response.data.weather[0].icon}@2x.png`
+    `http://openweathermap.org/img/wn/${response.data.list[0].weather[0].icon}@2x.png`
   );
-  weatherIcon.setAttribute("alt", response.data.weather[0].description);
-  weatherIcon.setAttribute("title", response.data.weather[0].description);
-}
+  weatherIcon.setAttribute("alt", response.data.list[0].weather[0].description);
+  weatherIcon.setAttribute(
+    "title",
+    response.data.list[0].weather[0].description
+  );
 
-function fiveDaysForecast(city) {
-  let key = "491127d7fac80a30edab9961c6790b41";
-  let url;
-
-  url = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${key}&&units=metric`;
-
-  axios.get(url).then(saveForecast);
+  saveForecast(response);
 }
 
 function saveForecast(response) {
@@ -140,25 +140,23 @@ function saveForecast(response) {
     });
   }
   displayForecast(preditions);
-  console.log(response.data);
 }
-fiveDaysForecast("Sidney");
 
 function displayForecast(preditions) {
   let forecastDays = document.querySelector("#forecast-days");
   let forecastIcons = document.querySelector("#forecast-icons");
   let forecastTemperatures = document.querySelector("#forecast-temperatures");
+  let currentUnit = document.querySelector("#current-unit").innerHTML.trim();
 
   let weekDaysHTML = "";
   let iconsHTML = "";
   let temperaturesHTML = "";
   for (let i = 0; i < preditions.length; i++) {
-    console.log(preditions[i].day);
     weekDaysHTML += `<th scope="col">${preditions[i].day}</th>`;
     iconsHTML += `<td><img src="http://openweathermap.org/img/wn/${preditions[i].icon}@2x.png" alt="${preditions[i].description}" title="${preditions[i].description}" id="forecast-icon"></td>`;
     temperaturesHTML += `<td>${Math.round(
       preditions[i].temp
-    )}º<span class="used-unit"> C</span></td>`;
+    )}º<span class="used-unit"> ${currentUnit}</span></td>`;
   }
   forecastDays.innerHTML = weekDaysHTML;
   forecastIcons.innerHTML = iconsHTML;
@@ -178,5 +176,4 @@ let button = document.querySelector("#current-location");
 button.addEventListener("click", getCurrentLocationWeather);
 
 //Get current location weather on load
-//getCurrentLocationWeather();
-displayCityWeather("Sidney", null, null, "metric");
+getCurrentLocationWeather();
